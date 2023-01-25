@@ -1,0 +1,46 @@
+﻿
+<script>
+    function help(s) {
+        var x = document.getElementById(s);
+        debugger;
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+    }
+</script>
+
+
+
+@{
+    Dictionary<string, byte[]> pList = @ViewBag.PicList;
+    foreach(string val in pList.Keys){
+        byte[] picAsBytes = (byte[])pList[val];
+        string imreBase64Data = Convert.ToBase64String(picAsBytes);
+        string imgDataURL = string.Format("data:image/png;base64,{0}", imreBase64Data);
+        <image id="@val" name="@val/TXT"src="@imgDataURL" width="200" height="200" onClick=help(this.name)></image>
+    }
+<br></br>
+ }
+<div>
+    @{
+        foreach (var txtdoc in @ViewBag.TextList)
+        {
+            string text = (string)txtdoc["txt"];
+            <p id="@txtdoc["_id"]/TXT" style="display :none">@text</p>
+        }
+    }
+</div>
+
+    
+
+
+
+
+
+
+
+
+
+
