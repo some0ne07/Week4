@@ -22,6 +22,27 @@ namespace WebApp3.Models
         {
             return await collection.Find(new BsonDocument()).Sort("{_id:-1}").ToListAsync();
         }
-    
-}
+
+        public async Task UpdateDocs(string imgId, string newTxt)
+        {
+            BsonDocument filter = new BsonDocument()
+            { { "imgId", imgId } };
+            BsonDocument doc = await collection.Find(filter).SingleAsync();
+
+            doc["txt"] = newTxt;
+
+            await collection.FindOneAndUpdateAsync(filter,doc);
+        }
+
+        [Obsolete]
+        public async Task UpdateImgId(string imId, string newImgId)
+        {
+            BsonDocument filter = new BsonDocument()
+            { { "imgId", imId } };
+            BsonDocument doc = await collection.Find(filter).SingleAsync();
+
+            doc["imgId"] = newImgId;
+            await collection.FindOneAndUpdateAsync(filter,doc);
+        }
+    }
 }

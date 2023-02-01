@@ -10,25 +10,45 @@
         }
     }
 </script>
+<script>
+    function helpForm(s) {
+        var x = document.getElementById(s);
+        debugger;
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+    }
+</script>
 
 
 
 @{
     Dictionary<string, byte[]> pList = @ViewBag.PicList;
     foreach(string val in pList.Keys){
+        
         byte[] picAsBytes = (byte[])pList[val];
         string imreBase64Data = Convert.ToBase64String(picAsBytes);
         string imgDataURL = string.Format("data:image/png;base64,{0}", imreBase64Data);
         <image id="@val" name="@val/TXT"src="@imgDataURL" width="200" height="200" onClick=help(this.name)></image>
+        <button name="@val/button" type="button" onclick="help(this.name)">Edit</button>
+        <form id="@val/button" action="" method="post" enctype="multipart/form-data" style="display :none">
+            <input type="text" id="imgId" name="imgId" value="@val" style="display :none"/>            
+            <input type="file" id="theFile" name="theFile" />
+            <input type="text" id="theText" name="theText" />
+            <button type="submit">Upload Image</button>
+        </form>
     }
-<br></br>
+
+<br>
  }
 <div>
     @{
         foreach (var txtdoc in @ViewBag.TextList)
         {
             string text = (string)txtdoc["txt"];
-            <p id="@txtdoc["_id"]/TXT" style="display :none">@text</p>
+            <p id="@txtdoc["imgId"]/TXT" style="display :none">@text</p>
         }
     }
 </div>

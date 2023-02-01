@@ -2,6 +2,7 @@
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.GridFS;
+using System.IO;
 
 namespace WebApp3.Models
 {
@@ -19,13 +20,18 @@ namespace WebApp3.Models
             bucket = new GridFSBucket(database);
         }
 
-        public async Task Addocs(string filename, byte[] source)
+        public async Task<BsonObjectId> AddDocs(string fileName, byte[] source)
         {
-            await bucket.UploadFromBytesAsync(filename,source);
+            return await bucket.UploadFromBytesAsync(fileName,source);
         }
-        public async Task<byte[]> Get(string filename)
+        public async Task<byte[]> Get(string imgId)
         {
-            return await bucket.DownloadAsBytesByNameAsync(filename);
+            return await bucket.DownloadAsBytesAsync(ObjectId.Parse(imgId));
         }
+        public async Task DeleteDocs(string imgId)
+        {
+            await bucket.DeleteAsync(ObjectId.Parse(imgId));
+        }
+
     }
 }
